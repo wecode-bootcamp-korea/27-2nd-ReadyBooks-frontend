@@ -1,7 +1,5 @@
-import React from 'react';
+const BASELINE = '';
 
-function config() {
-  return <div />;
-}
-
-export default config;
+export const API = {
+  cart: `${BASELINE}/cart`,
+};
