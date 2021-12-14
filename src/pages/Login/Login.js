@@ -9,25 +9,21 @@ function Login() {
   const navigate = useNavigate();
   const [search, setSearch] = useSearchParams();
   const AUTHORIZE_CODE = search.get('code');
-
-  if (!!AUTHORIZE_CODE) {
-    fetch('https://kauth.kakao.com/oauth/token', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      body: JSON.stringify({
-        grant_type: 'authorization_code',
-        client_id: REST_API_KEY,
-        redirect_uri: REDIRECT_URI,
-        code: AUTHORIZE_CODE,
-      }),
-    })
-      .then(res => res.json())
-      .then(res => {
-        console.log(res);
-      });
-  }
+  // 백엔드에 AUTHORIZE_CODE 전달
+  // if (!!AUTHORIZE_CODE) {
+  //   fetch('백엔드URL', {
+  //     method: 'POST',
+  //     body: JSON.stringify({
+  //       AUTHORIZE_CODE: AUTHORIZE_CODE,
+  //     }),
+  //   })
+  //     .then(res => res.json())
+  //     .then(res => {
+  //       // 성공 시
+  //       navigate('/');
+  //       alert('로그인 되었습니다!');
+  //     });
+  // }
   console.log('AUTHORIZE_CODE', AUTHORIZE_CODE);
   return (
     <div>
