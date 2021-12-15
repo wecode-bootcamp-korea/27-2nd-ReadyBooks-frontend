@@ -1,0 +1,43 @@
+[
+  {
+    "book_id": 0,
+    "name": "Sara jenny",
+    "title": "안녕안녕코딩이야",
+    "thumbnail": "이미지",
+    "alt": "love and war",
+    "price": 32000
+  },
+  {
+    "book_id": 1,
+    "name": "jenny",
+    "title": "안녕안녕코딩이야",
+    "thumbnail": "이미지",
+    "alt": "love and war",
+    "price": 28000
+  },
+
+  {
+    "book_id": 2,
+    "name": "Sara",
+    "title": "안녕",
+    "thumbnail": "이미지",
+    "alt": "love and war",
+    "price": 12000
+  },
+  {
+    "book_id": 3,
+    "name": "Sara jenny",
+    "title": "집가고싶다",
+    "thumbnail": "이미지",
+    "alt": "love and war",
+    "price": 12000
+  },
+  {
+    "book_id": 4,
+    "name": "Sara jenny",
+    "title": "우와짱이야",
+    "thumbnail": "이미지",
+    "alt": "love and war",
+    "price": 12000
+  }
+]
