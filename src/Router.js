@@ -6,6 +6,7 @@ import Main from './pages/Main/Main';
 import Detail from './pages/Detail/Detail';
 import Cart from './pages/Cart/Cart';
 import styled from 'styled-components';
+
 function Router() {
   return (
     <BrowserRouter>
