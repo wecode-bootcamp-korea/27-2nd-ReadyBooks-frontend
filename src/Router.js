@@ -26,6 +26,5 @@ function Router() {
 export default Router;
 
 const Body = styled.div`
-  position: relative;
   padding-top: 120px;
 `;

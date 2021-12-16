@@ -121,12 +121,6 @@ const AuthorUnit = styled.span`
   color: ${({ theme }) => theme.darkGrey};
 `;
 
-const Price = styled.span`
-  margin-top: 10px;
-  font-weight: 400;
-  font-size: 15px;
-`;
-
 const PreviewBtn = styled.button`
   margin: 15px 0;
   width: 200px;
