@@ -6,7 +6,6 @@ import Main from './pages/Main/Main';
 import Detail from './pages/Detail/Detail';
 import Cart from './pages/Cart/Cart';
 import styled from 'styled-components';
-
 function Router() {
   return (
     <BrowserRouter>
@@ -23,9 +22,9 @@ function Router() {
   );
 }
 
+export default Router;
+
 const Body = styled.div`
   position: relative;
   top: 120px;
 `;
-
-export default Router;

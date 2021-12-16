@@ -86,7 +86,7 @@ const Nav = () => {
           </NavRightBtn>
         ) : (
           <LoginBtn onClick={login}>
-            <img src="images/kakao_login_medium.png" alt="login" />
+            <img src="/images/kakao_login_medium.png" alt="login" />
           </LoginBtn>
         )}
       </Wrapper>

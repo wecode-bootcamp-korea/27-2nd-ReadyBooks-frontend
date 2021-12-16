@@ -1,0 +1,35 @@
+{
+  "result": [
+    {
+      "purchased": true,
+      "name": "책1",
+      "price": "9000.00",
+      "discription": "description",
+      "thumbnail": "thumbnail",
+      "authors": ["author1", "author2"],
+      "average": {
+        "rating__avg": "5.000000"
+      },
+      "reviews": [
+        {
+          "user": "\bnickname1",
+          "rating": "5.00",
+          "content": "content",
+          "created_at": "2021-12-15T11:54:13.060Z"
+        },
+        {
+          "user": "\bnickname2",
+          "rating": "4.00",
+          "content": "content",
+          "created_at": "2021-12-15T11:54:13.062Z"
+        },
+        {
+          "user": "\bnickname3",
+          "rating": "3.00",
+          "content": "content",
+          "created_at": "2021-12-15T11:54:13.062Z"
+        }
+      ]
+    }
+  ]
+}
