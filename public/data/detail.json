@@ -7,9 +7,7 @@
       "discription": "description",
       "thumbnail": "thumbnail",
       "authors": ["author1", "author2"],
-      "average": {
-        "rating__avg": "5.000000"
-      },
+
       "reviews": [
         {
           "user": "\bnickname1",

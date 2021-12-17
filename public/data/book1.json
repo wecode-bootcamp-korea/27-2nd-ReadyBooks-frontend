@@ -1,0 +1,15 @@
+{
+  "result": [
+    {
+      "purchased": true,
+      "name": "책1",
+      "price": "9000.00",
+      "description": "description",
+      "thumbnail": "https://ifh.cc/g/jiKSVx.jpg",
+      "authors": ["author1", "author2"],
+      "average": {
+        "avg_rating": 5.0
+      }
+    }
+  ]
+}
