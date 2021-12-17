@@ -1,17 +1,21 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
-import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
-import Review from './Review/Review';
+import { IoBook, IoBookOutline } from 'react-icons/io5';
+import { API } from '../../../config.js';
+import Reviews from './Reviews/Reviews';
+import { useParams } from 'react-router-dom';
 
-function DetailReviews() {
-  const [reviews, setReviews] = useState(BASEREVIEWS);
+function DetailReviews({ aboutReviews, getReviews, book }) {
+  const { purchased } = book;
+  const { review } = aboutReviews;
   const [inputRate, setInputRate] = useState(5);
   const [inputTextarea, setInputTextarea] = useState('');
-  // TODO : 통신 후 수정 , 로그인 되어야 보여짐
-  const nickname = sessionStorage.getItem('user_nickname') || 'maria';
-  //  TODO : 백엔드 통신에 이용해야함
-  const userId = sessionStorage.getItem('user_id') || 1;
-  const nextReviewId = useRef(4);
+  const Authorization = sessionStorage.getItem('Authorization');
+  const params = useParams();
+  const { bookId } = params;
+  const nickname = sessionStorage.getItem('user_nickname');
+  // const userId = sessionStorage.getItem('user_id');
+
   const handleAddRateStarInput = i => {
     setInputRate(i + 1);
   };
@@ -21,37 +25,64 @@ function DetailReviews() {
   };
 
   const addReview = () => {
+    if (!Authorization) {
+      alert('로그인이 필요한 서비스입니다.');
+      return;
+    }
+
     if (!inputTextarea.trim().length) {
       return;
     }
 
-    const today = date.toLocaleDateString();
-
-    setReviews([
-      ...reviews,
-      {
-        user: nickname,
-        rating: inputRate,
-        content: inputTextarea,
-        created_at: today,
-        user_id: userId,
-        review_id: nextReviewId.current,
-      },
-    ]);
-
+    // nextReviewId.current, 부분
+    // TODO 에러처리
     // TODO 백엔드 소통
-    // fetch('백엔드URL', {
-    //   method: 'POST',
-    //   body: JSON.stringify({
-    //     user_id: userId,
-    //     user: nickname,
-    //     review_Id: userId,
-    //     content: inputTextarea,
-    //   }),
-    // });
-    nextReviewId.current += 1;
+    fetch(`${API.review}/${bookId}`, {
+      headers: {
+        ...(Authorization && { Authorization: Authorization }),
+      },
+      method: 'POST',
+      body: JSON.stringify({
+        nickname: nickname,
+        content: inputTextarea,
+        raiting: inputRate,
+      }),
+    })
+      .then(res => res.json())
+      .then(res => {
+        getReviews();
+      })
+      .catch(e => {
+        console.error(e);
+      });
+
     setInputRate(5);
     setInputTextarea('');
+  };
+
+  const deleteReview = reviewId => {
+    if (!Authorization) {
+      alert('로그인이 필요한 서비스입니다.');
+      return;
+    }
+    // TODO 에러처리
+    // 백엔드 통신
+
+    fetch(`${API.review}/${reviewId}`, {
+      method: 'DELETE',
+      headers: {
+        ...(Authorization && { Authorization: Authorization }),
+      },
+    })
+      .then(res => res.json())
+      .then(res => {
+        if (res.message === 'NO CONTENT') {
+          getReviews();
+        }
+      })
+      .catch(e => {
+        console.error(e);
+      });
   };
 
   const EnterInTextArea = e => {
@@ -61,64 +92,50 @@ function DetailReviews() {
     }
   };
 
-  const deleteReview = reviewId => {
-    setReviews(reviews.filter(review => !(review.review_id === reviewId)));
-
-    // 백엔드 통신
-    //   fetch('', {
-    //     method: 'POST',
-    //     headers: {
-    //       Authorization: '',
-    //     },
-    //     body: JSON.stringify({
-    //       review_id: reviewId,
-    //     }),
-    //   });
-  };
-
   return (
     <ReviewsWrapper>
-      <RateContainer>
-        <RateContainerTitle>평균평점</RateContainerTitle>
-        <AverageRate>5.0</AverageRate>
-      </RateContainer>
-      <ReviewInputWrapper>
-        <AddRate>
-          {[...Array(5)].map((_, i) => {
-            return i < inputRate ? (
-              <AiFillStar key={i} onClick={() => handleAddRateStarInput(i)} />
-            ) : (
-              <AiOutlineStar
-                key={i}
-                onClick={() => handleAddRateStarInput(i)}
-              />
-            );
-          })}
-        </AddRate>
-        <ReviewTextArea
-          onChange={changeTextarea}
-          placeholder="리뷰 작성 시 광고 및 욕설, 비속어나 타인을 비방하는 문구를 사용하시면 비공개 될 수 있습니다."
-          value={inputTextarea}
-          onKeyPress={EnterInTextArea}
-        />
-        <AddReviewBtn onClick={addReview}>리뷰 추가</AddReviewBtn>
-      </ReviewInputWrapper>
-      <Reviews>
-        {reviews.map((review, i) => (
-          <Review
-            key={review.review_id}
-            review={review}
-            deleteReview={deleteReview}
-          />
-        ))}
-      </Reviews>
+      {!!Object.keys(aboutReviews).length && (
+        <>
+          <ReviewInputWrapper>
+            <AddRate>
+              {[...Array(5)].map((_, i) => {
+                return i < inputRate ? (
+                  <IoBook key={i} onClick={() => handleAddRateStarInput(i)} />
+                ) : (
+                  <IoBookOutline
+                    key={i}
+                    onClick={() => handleAddRateStarInput(i)}
+                  />
+                );
+              })}
+            </AddRate>
+            <ReviewTextArea
+              onChange={changeTextarea}
+              placeholder={
+                !purchased || !Authorization
+                  ? '로그인이 필요한 서비스입니다 :)'
+                  : '다양한 생각을 남겨주세요 :)'
+              }
+              value={inputTextarea}
+              onKeyPress={EnterInTextArea}
+              disabled={!purchased || !Authorization ? true : false}
+            />
+            <AddReviewBtn
+              disabled={!inputTextarea.trim().length}
+              isDisabled={!inputTextarea.trim().length}
+              onClick={addReview}
+            >
+              리뷰 추가
+            </AddReviewBtn>
+          </ReviewInputWrapper>
+          <Reviews reviews={review} deleteReview={deleteReview} />
+        </>
+      )}
     </ReviewsWrapper>
   );
 }
 
 export default DetailReviews;
-
-const date = new Date();
 
 const ReviewsWrapper = styled.div`
   display: flex;
@@ -126,31 +143,13 @@ const ReviewsWrapper = styled.div`
   align-items: center;
 `;
 
-const RateContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const RateContainerTitle = styled.span`
-  font-size: 20px;
-  font-weight: 600;
-`;
-
-const AverageRate = styled.span`
-  margin-top: 10px;
-  font-size: 30px;
-  font-weight: 700;
-`;
-
 const ReviewInputWrapper = styled.div`
-  margin-bottom: 15px;
-  padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-bottom: 15px;
   margin-top: 10px;
-  background: ${({ theme }) => theme.white};
+  padding: 20px;
   border-radius: 5px;
 `;
 
@@ -158,6 +157,7 @@ const AddRate = styled.div`
   margin-bottom: 10px;
 
   svg {
+    margin: 0 5px;
     font-size: 30px;
     color: ${({ theme }) => theme.grey};
     cursor: pointer;
@@ -165,9 +165,10 @@ const AddRate = styled.div`
 `;
 
 const ReviewTextArea = styled.textarea`
-  padding: 10px;
+  padding: 15px;
   width: 400px;
   height: 100px;
+  background: #faf9fd;
   resize: none;
   border: none;
 
@@ -185,36 +186,5 @@ const AddReviewBtn = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  opacity: ${({ isDisabled }) => (isDisabled ? '0.5' : '1')};
 `;
-
-const Reviews = styled.ul`
-  width: 900px;
-  margin: 20px 0;
-  padding: 0px 20px;
-`;
-const BASEREVIEWS = [
-  {
-    review_id: 1,
-    user_id: 1,
-    user: '\bnickname1',
-    rating: '5.00',
-    content: 'content',
-    created_at: '2021-12-15T11:54:13.060Z',
-  },
-  {
-    review_id: 2,
-    user_id: 2,
-    user: '\bnickname2',
-    rating: '4.00',
-    content: 'content',
-    created_at: '2021-12-15T11:54:13.062Z',
-  },
-  {
-    review_id: 3,
-    user_id: 3,
-    user: '\bnickname2',
-    rating: '3.00',
-    content: 'content',
-    created_at: '2021-12-15T11:54:13.062Z',
-  },
-];

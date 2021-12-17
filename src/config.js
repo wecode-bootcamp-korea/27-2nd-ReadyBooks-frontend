@@ -1,9 +1,9 @@
-const BASELINE = '';
-const BASELINE_JONGHO = 'http://10.58.6.17:8000';
 const BASELINE_JUHO = 'http://10.58.7.3:8000';
+const BASELINE_JINSUNG = 'http://10.58.0.42:8000';
 
 export const API = {
-  cart: `${BASELINE}/cart`,
-  login: `${BASELINE_JONGHO}/users/kakao/signin`,
-  books: `${BASELINE_JUHO}/books/all`,
+  carts: `${BASELINE_JUHO}/carts`,
+  login: `${BASELINE_JUHO}/users/kakao/signin`,
+  book: `${BASELINE_JINSUNG}/books`,
+  review: `${BASELINE_JINSUNG}/books/review`,
 };

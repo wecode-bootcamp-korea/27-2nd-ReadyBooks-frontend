@@ -51,7 +51,6 @@ const Footerwrap = styled.div`
   flex-direction: column;
   padding: 30px;
 `;
-
 const Background = styled.div`
   width: 100%;
   color: black;
@@ -60,7 +59,7 @@ const Background = styled.div`
 `;
 
 const Readybooks = styled.span`
-  background: transparent
+  background: transparent;
   height: 50px;
   color: #f2f2f2;
 `;
@@ -76,9 +75,9 @@ const UseInfo = styled.div`
   display: flex;
   width: 100%;
   align-items: center;
-  background: transparent
+  background: transparent;
   flex-wrap: wrap;
-  color : white;
+  color: white;
 `;
 
 const UseInfoText = styled.div`

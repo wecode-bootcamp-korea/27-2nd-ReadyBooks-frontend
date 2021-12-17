@@ -1,31 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
-import { AiFillStar, AiOutlineStar } from 'react-icons/ai';
 import { TiDelete } from 'react-icons/ti';
 
 function Review({ review, deleteReview }) {
-  const { user, user_id, rating, content, created_at, review_id } = review;
-  const currentUserId = sessionStorage.getItem('user_id') || 1;
+  const { user, user_id, content, created_at, review_id } = review;
+  const currentUserId = sessionStorage.getItem('user_id');
   const createDate = new Date(created_at);
-  const rate = parseInt(rating);
 
   return (
     <ReviewWrapper
-      iswritter={Number(user_id) === Number(currentUserId) ? true : false}
+      isWriter={Number(user_id) === Number(currentUserId) ? true : false}
     >
       <ReviewContent>
         <ReviewInformation>
-          <Rate>
-            {[...Array(5)].map((_, i) => {
-              return i < rate ? (
-                <AiFillStar key={i} />
-              ) : (
-                <AiOutlineStar key={i} />
-              );
-            })}
-          </Rate>
-          <Writter>{user}</Writter>
-          <CreateDate>{createDate.toLocaleDateString()}</CreateDate>
+          <Writer>{user}</Writer>
+          <ReviewDate>
+            {createDate.toLocaleDateString().slice(0, -1)}
+          </ReviewDate>
         </ReviewInformation>
         <ReviewText>{content}</ReviewText>
       </ReviewContent>
@@ -58,8 +49,8 @@ const ReviewWrapper = styled.li`
   }
 
   &:hover ${DeleteBtn} {
-    opacity: ${({ iswritter }) => (iswritter ? 1 : 0)};
-    cursor: ${({ iswritter }) => (iswritter ? 'pointer' : 'auto')};
+    opacity: ${({ isWriter }) => (isWriter ? 1 : 0)};
+    cursor: ${({ isWriter }) => (isWriter ? 'pointer' : 'auto')};
   }
 `;
 
@@ -70,17 +61,21 @@ const ReviewContent = styled.div`
 const ReviewInformation = styled.div`
   display: flex;
   flex-direction: column;
+  font-size: 14px;
 `;
 
-const Rate = styled.div``;
-
-const Writter = styled.span`
-  margin: 5px 0;
+const Writer = styled.span`
+  margin-bottom: 5px;
   font-weight: 500;
+  color: ${({ theme }) => theme.darkGrey};
 `;
 
-const CreateDate = styled.span``;
+const ReviewDate = styled.span`
+  font-size: 12px;
+  color: ${({ theme }) => theme.grey};
+`;
 
 const ReviewText = styled.span`
   margin-left: 30px;
+  color: ${({ theme }) => theme.veryDarkGrey};
 `;

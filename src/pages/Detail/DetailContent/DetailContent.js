@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
 import { IoCart } from 'react-icons/io5';
+import { MdOutlineRateReview, MdStarRate } from 'react-icons/md';
+import { API } from '../../../config';
 
-function DetailContent() {
-  const [content, setContent] = useState(MOCKCONTENT);
-  const { purchased, name, authors, price, description } = content;
-  const Authorization = sessionStorage.getItem('Authorization') || '';
+function DetailContent({ book, setBook, aboutReviews }) {
+  const params = useParams();
+  const { bookId } = params;
+  const reviewsLength = !aboutReviews ? 0 : aboutReviews.review.length;
+  const { purchased, name, authors, price, description, thumbnail } = book;
+  const avgRating = !aboutReviews ? 0.0 : aboutReviews.average.avg_rating;
+
+  const Authorization = sessionStorage.getItem('Authorization');
 
   const buyBook = () => {
     if (!Authorization) {
@@ -26,7 +33,7 @@ function DetailContent() {
     // }, []);
 
     alert('구매되었습니다!');
-    setContent({ ...content, purchased: true });
+    setBook({ ...book, purchased: true });
   };
 
   const toCartPage = () => {
@@ -34,35 +41,65 @@ function DetailContent() {
       alert('로그인이 필요한 서비스입니다');
       return;
     }
+
+    fetch(API.carts, {
+      headers: {
+        Authorization: Authorization,
+      },
+      body: JSON.stringify({
+        book_id: bookId,
+      }),
+    })
+      .then(res => res.json())
+      .then(res => {
+        // purchased 설정
+        // content 설정
+      });
     // TODO 백엔드 통신 장바구니 추가하기
   };
 
   return (
     <DetailContentWrapper>
       <Information>
-        <Thumbnail src="/images/littlePrince.jpeg" />
+        <BookImg>
+          <Thumbnail src={thumbnail} />
+        </BookImg>
         <InformationText>
-          {purchased ? (
-            <ReadBtn>보기</ReadBtn>
-          ) : (
-            <PreviewBtn>미리보기</PreviewBtn>
-          )}
-          <Name>{name}</Name>
-          <Authors>
-            {authors.join(', ')} <AuthorUnit>저</AuthorUnit>
-          </Authors>
+          <InformationTextTop>
+            <Name>{name}</Name>
+            <Authors>{authors.join(', ')} 저</Authors>
+            {!purchased && (
+              <BuyBtns>
+                <BuyBtn onClick={buyBook}>
+                  구매 {Number(price).toLocaleString()} 원
+                </BuyBtn>
+                <CartBtn onClick={toCartPage}>
+                  <IoCart />
+                </CartBtn>
+              </BuyBtns>
+            )}
+          </InformationTextTop>
+          <InformationTextBottom>
+            {purchased ? (
+              <ReadBtn>보기</ReadBtn>
+            ) : (
+              <PreviewBtn>미리보기</PreviewBtn>
+            )}
+            <Border />
+            <AboutReview>
+              <MdOutlineRateReview />
+              <ReviewTitle>리뷰</ReviewTitle>
+              <ReviewText>{reviewsLength}개</ReviewText>
+            </AboutReview>
+            <Border />
+            <Rate>
+              <MdStarRate />
+              <RateTitle>평점</RateTitle>
+              <RateText>{Number(avgRating).toFixed(2)}</RateText>
+            </Rate>
+          </InformationTextBottom>
         </InformationText>
       </Information>
-      {!purchased && (
-        <BuyBtns>
-          <BuyBtn onClick={buyBook}>
-            구매 {Number(price).toLocaleString()} 원
-          </BuyBtn>
-          <CartBtn onClick={toCartPage}>
-            <IoCart />
-          </CartBtn>
-        </BuyBtns>
-      )}
       <Description>
         <DescriptionTitle>작품 소개</DescriptionTitle>
         <DescriptionContent>{description}</DescriptionContent>
@@ -76,77 +113,87 @@ export default DetailContent;
 const DetailContentWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   padding: 60px 0px 30px;
 `;
 
 const Information = styled.div`
   display: flex;
+  align-items: flex-start;
+  margin-bottom: 30px;
+  width: 100%;
+`;
+
+const BookImg = styled.div`
+  display: flex;
   flex-direction: column;
-  align-items: center;
-  margin-bottom: 20px;
 `;
 
 const Thumbnail = styled.img`
   width: 200px;
   height: 285px;
+  border-radius: 10px;
   object-fit: cover;
+  box-shadow: 5px 5px 10px 2px rgb(0 0 0 / 32%);
 `;
 
 const InformationText = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
+  margin-left: 40px;
+  width: 100%;
+  height: 285px;
+  border-radius: 5px;
 `;
+
+const InformationTextTop = styled.div``;
 
 const Name = styled.span`
   max-width: 350px;
   overflow: hidden;
-  font-size: 26px;
-  font-weight: 500;
+  font-size: 25px;
+  font-weight: 600;
   text-overflow: ellipsis;
   white-space: nowrap;
 `;
 
 const Authors = styled.p`
   margin-top: 10px;
-  font-weight: 500;
-  font-size: 15px;
-`;
-
-const AuthorUnit = styled.span`
   font-weight: 400;
   font-size: 14px;
   color: ${({ theme }) => theme.darkGrey};
 `;
 
+const InformationTextBottom = styled.div`
+  display: flex;
+  background: #faf9fd;
+  width: 100%;
+  align-items: center;
+  padding: 6px 0px;
+  border-radius: 10px;
+`;
+
 const PreviewBtn = styled.button`
+  flex: 1;
   margin: 15px 0;
   width: 200px;
   padding: 8px 0;
   background: transparent;
-  border: 1px solid ${({ theme }) => theme.pointCobalt};
+  border: none;
   border-radius: 5px;
   color: ${({ theme }) => theme.pointCobalt};
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
 `;
 
-const ReadBtn = styled(PreviewBtn)`
-  background: ${({ theme }) => theme.pointCobalt};
-  border: none;
-  color: ${({ theme }) => theme.white};
-
-  &:hover {
-    background: ${({ theme }) => theme.pointDarkCobalt};
-  }
-`;
+const ReadBtn = styled(PreviewBtn)``;
 
 const BuyBtns = styled.div`
   display: flex;
   justify-content: space-between;
-  padding-bottom: 20px;
+  margin-top: 10px;
   width: 200px;
 `;
 
@@ -160,7 +207,7 @@ const BuyBtn = styled.button`
   cursor: pointer;
 
   &:hover {
-    background: ${({ theme }) => theme.pointDarkCobalt};
+    background: #4c30b1;
   }
 `;
 
@@ -181,11 +228,46 @@ const CartBtn = styled.button`
   }
 `;
 
+const Border = styled.div`
+  border-left: 1px solid ${({ theme }) => theme.lightGrey};
+  height: 35px;
+`;
+
+const AboutReview = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 20px;
+  color: ${({ theme }) => theme.grey};
+`;
+
+const ReviewTitle = styled.span`
+  margin: 4px 0 5px;
+  color: ${({ theme }) => theme.grey};
+  font-size: 11px;
+  font-weight: 500;
+`;
+
+const ReviewText = styled.span`
+  color: ${({ theme }) => theme.veryDarkGrey};
+  font-size: 13px;
+  font-weight: 700;
+`;
+
+const Rate = styled(AboutReview)`
+  border: none;
+`;
+
+const RateTitle = styled(ReviewTitle)``;
+
+const RateText = styled(ReviewText)``;
+
 const Description = styled.div`
   width: 100%;
   padding-top: 30px;
-  border-top: 1px solid ${({ theme }) => theme.veryLightGrey};
-  border-bottom: 1px solid ${({ theme }) => theme.veryLightGrey};
+  border-top: 1px solid ${({ theme }) => theme.white};
+  border-bottom: 1px solid ${({ theme }) => theme.white};
 `;
 
 const DescriptionTitle = styled.span`
@@ -196,36 +278,3 @@ const DescriptionContent = styled.p`
   padding: 30px 0;
   line-height: 1.3;
 `;
-
-const MOCKCONTENT = {
-  purchased: true,
-  name: '책1',
-  price: '9000.00',
-  description:
-    'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Sunt totam minus expedita sequi, aspernatur quasi recusandae .',
-  thumbnail: 'thumbnail',
-  authors: ['author1', 'author2'],
-  average: {
-    rating__avg: '5.000000',
-  },
-  reviews: [
-    {
-      user: '\bnickname1',
-      rating: '5.00',
-      content: 'content',
-      created_at: '2021-12-15T11:54:13.060Z',
-    },
-    {
-      user: '\bnickname2',
-      rating: '4.00',
-      content: 'content',
-      created_at: '2021-12-15T11:54:13.062Z',
-    },
-    {
-      user: '\bnickname3',
-      rating: '3.00',
-      content: 'content',
-      created_at: '2021-12-15T11:54:13.062Z',
-    },
-  ],
-};
