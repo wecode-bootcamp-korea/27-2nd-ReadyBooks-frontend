@@ -5,10 +5,10 @@ import { IoCart } from 'react-icons/io5';
 function DetailContent() {
   const [content, setContent] = useState(MOCKCONTENT);
   const { purchased, name, authors, price, description } = content;
-  const Authorizaition = sessionStorage.getItem('Authorizaition') || '';
+  const Authorization = sessionStorage.getItem('Authorization') || '';
 
   const buyBook = () => {
-    if (!Authorizaition) {
+    if (!Authorization) {
       alert('로그인이 필요한 서비스입니다');
       return;
     }
@@ -16,7 +16,7 @@ function DetailContent() {
     //  TODO 백엔드 통신
     // useEffect(() => {
     //   fetch('', headers: {
-    // Authorizaition: Authorizaition
+    // Authorization: Authorization
     // })
     //     .then(res => res.json())
     //     .then(res => {
@@ -30,7 +30,7 @@ function DetailContent() {
   };
 
   const toCartPage = () => {
-    if (!Authorizaition) {
+    if (!Authorization) {
       alert('로그인이 필요한 서비스입니다');
       return;
     }
@@ -40,23 +40,24 @@ function DetailContent() {
   return (
     <DetailContentWrapper>
       <Information>
-        <Thumnail src="/images/littlePrince.jpeg" />
-        {purchased ? (
-          <ReadBtn>보기</ReadBtn>
-        ) : (
-          <PreviewBtn>미리보기</PreviewBtn>
-        )}
+        <Thumbnail src="/images/littlePrince.jpeg" />
         <InformationText>
+          {purchased ? (
+            <ReadBtn>보기</ReadBtn>
+          ) : (
+            <PreviewBtn>미리보기</PreviewBtn>
+          )}
           <Name>{name}</Name>
           <Authors>
             {authors.join(', ')} <AuthorUnit>저</AuthorUnit>
           </Authors>
-          <Price>판매가 : {Number(price).toLocaleString()} 원</Price>
         </InformationText>
       </Information>
       {!purchased && (
         <BuyBtns>
-          <BuyBtn onClick={buyBook}>구매하기</BuyBtn>
+          <BuyBtn onClick={buyBook}>
+            구매 {Number(price).toLocaleString()} 원
+          </BuyBtn>
           <CartBtn onClick={toCartPage}>
             <IoCart />
           </CartBtn>
@@ -86,7 +87,7 @@ const Information = styled.div`
   margin-bottom: 20px;
 `;
 
-const Thumnail = styled.img`
+const Thumbnail = styled.img`
   width: 200px;
   height: 285px;
   object-fit: cover;
@@ -203,7 +204,7 @@ const DescriptionContent = styled.p`
 `;
 
 const MOCKCONTENT = {
-  purchased: false,
+  purchased: true,
   name: '책1',
   price: '9000.00',
   description:

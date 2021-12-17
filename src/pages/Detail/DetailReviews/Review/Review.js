@@ -11,10 +11,10 @@ function Review({ review, deleteReview }) {
 
   return (
     <ReviewWrapper
-      iswriter={Number(user_id) === Number(currentUserId) ? true : false}
+      iswritter={Number(user_id) === Number(currentUserId) ? true : false}
     >
       <ReviewContent>
-        <ReviewInforamtion>
+        <ReviewInformation>
           <Rate>
             {[...Array(5)].map((_, i) => {
               return i < rate ? (
@@ -24,9 +24,9 @@ function Review({ review, deleteReview }) {
               );
             })}
           </Rate>
-          <Writer>{user}</Writer>
+          <Writter>{user}</Writter>
           <CreateDate>{createDate.toLocaleDateString()}</CreateDate>
-        </ReviewInforamtion>
+        </ReviewInformation>
         <ReviewText>{content}</ReviewText>
       </ReviewContent>
       <DeleteBtn onClick={() => deleteReview(review_id)}>
@@ -58,8 +58,8 @@ const ReviewWrapper = styled.li`
   }
 
   &:hover ${DeleteBtn} {
-    opacity: ${({ iswriter }) => (iswriter ? 1 : 0)};
-    cursor: ${({ iswriter }) => (iswriter ? 'pointer' : 'auto')};
+    opacity: ${({ iswritter }) => (iswritter ? 1 : 0)};
+    cursor: ${({ iswritter }) => (iswritter ? 'pointer' : 'auto')};
   }
 `;
 
@@ -67,14 +67,14 @@ const ReviewContent = styled.div`
   display: flex;
 `;
 
-const ReviewInforamtion = styled.div`
+const ReviewInformation = styled.div`
   display: flex;
   flex-direction: column;
 `;
 
 const Rate = styled.div``;
 
-const Writer = styled.span`
+const Writter = styled.span`
   margin: 5px 0;
   font-weight: 500;
 `;
