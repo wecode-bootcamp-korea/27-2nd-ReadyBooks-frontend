@@ -85,7 +85,7 @@ const UseInfoText = styled.div`
   display: flex;
   flex-direction: column;
   background: transparent;
-  width: 28%;
+  width: 550px;
   font-weight: 13px;
   justify-content: space-between;
 `;
