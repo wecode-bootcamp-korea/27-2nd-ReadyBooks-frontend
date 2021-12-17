@@ -30,7 +30,7 @@ const sendAccessTokenToBack = (access_token, navigate, setLoggedIn) => {
     .then(res => res.json())
     .then(res => {
       if (res.Authorization) {
-        sessionStorage.setItem('Authorizaition', res.Authorization);
+        sessionStorage.setItem('Authorization', res.Authorization);
         sessionStorage.setItem('user_nickname', res.user_nickname);
         sessionStorage.setItem('user_profile_img', res.user_profile_img);
         sessionStorage.setItem('user_id', res.user_id);

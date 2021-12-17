@@ -6,7 +6,7 @@ import Review from './Review/Review';
 function DetailReviews() {
   const [reviews, setReviews] = useState(BASEREVIEWS);
   const [inputRate, setInputRate] = useState(5);
-  const [inputTextrea, setInputTextrea] = useState('');
+  const [inputTextarea, setInputTextarea] = useState('');
   // TODO : 통신 후 수정 , 로그인 되어야 보여짐
   const nickname = sessionStorage.getItem('user_nickname') || 'maria';
   //  TODO : 백엔드 통신에 이용해야함
@@ -17,11 +17,11 @@ function DetailReviews() {
   };
 
   const changeTextarea = e => {
-    setInputTextrea(e.target.value);
+    setInputTextarea(e.target.value);
   };
 
   const addReview = () => {
-    if (!inputTextrea.trim().length) {
+    if (!inputTextarea.trim().length) {
       return;
     }
 
@@ -32,7 +32,7 @@ function DetailReviews() {
       {
         user: nickname,
         rating: inputRate,
-        content: inputTextrea,
+        content: inputTextarea,
         created_at: today,
         user_id: userId,
         review_id: nextReviewId.current,
@@ -46,15 +46,15 @@ function DetailReviews() {
     //     user_id: userId,
     //     user: nickname,
     //     review_Id: userId,
-    //     content: inputTextrea,
+    //     content: inputTextarea,
     //   }),
     // });
     nextReviewId.current += 1;
     setInputRate(5);
-    setInputTextrea('');
+    setInputTextarea('');
   };
 
-  const EnterInTextAtrea = e => {
+  const EnterInTextArea = e => {
     if (e.code === 'Enter') {
       addReview();
       e.preventDefault();
@@ -98,8 +98,8 @@ function DetailReviews() {
         <ReviewTextArea
           onChange={changeTextarea}
           placeholder="리뷰 작성 시 광고 및 욕설, 비속어나 타인을 비방하는 문구를 사용하시면 비공개 될 수 있습니다."
-          value={inputTextrea}
-          onKeyPress={EnterInTextAtrea}
+          value={inputTextarea}
+          onKeyPress={EnterInTextArea}
         />
         <AddReviewBtn onClick={addReview}>리뷰 추가</AddReviewBtn>
       </ReviewInputWrapper>
