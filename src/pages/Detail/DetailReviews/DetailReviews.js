@@ -1,20 +1,19 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { IoBook, IoBookOutline } from 'react-icons/io5';
-import { API } from '../../../config.js';
 import Reviews from './Reviews/Reviews';
 import { useParams } from 'react-router-dom';
+import { IoBook, IoBookOutline } from 'react-icons/io5';
+import { API } from '../../../config.js';
 
 function DetailReviews({ aboutReviews, getReviews, book }) {
+  const params = useParams();
+  const { bookId } = params;
   const { purchased } = book;
   const { review } = aboutReviews;
   const [inputRate, setInputRate] = useState(5);
   const [inputTextarea, setInputTextarea] = useState('');
   const Authorization = sessionStorage.getItem('Authorization');
-  const params = useParams();
-  const { bookId } = params;
   const nickname = sessionStorage.getItem('user_nickname');
-  // const userId = sessionStorage.getItem('user_id');
 
   const handleAddRateStarInput = i => {
     setInputRate(i + 1);
@@ -34,23 +33,34 @@ function DetailReviews({ aboutReviews, getReviews, book }) {
       return;
     }
 
-    // nextReviewId.current, 부분
-    // TODO 에러처리
-    // TODO 백엔드 소통
-    fetch(`${API.review}/${bookId}`, {
+    fetch(`${API.review}`, {
       headers: {
-        ...(Authorization && { Authorization: Authorization }),
+        Authorization: Authorization,
       },
       method: 'POST',
       body: JSON.stringify({
         nickname: nickname,
         content: inputTextarea,
-        raiting: inputRate,
+        rating: inputRate,
+        book_id: bookId,
       }),
     })
       .then(res => res.json())
       .then(res => {
-        getReviews();
+        switch (res.message) {
+          case 'SUCCESSS':
+            getReviews();
+            break;
+          case 'INVALID_USER':
+          case 'INVALID_TOKEN':
+            alert('로그인이 필요한 서비스입니다.');
+            break;
+          case 'KEY_ERROR':
+            alert('에러입니다');
+            break;
+          default:
+            break;
+        }
       })
       .catch(e => {
         console.error(e);
@@ -65,19 +75,22 @@ function DetailReviews({ aboutReviews, getReviews, book }) {
       alert('로그인이 필요한 서비스입니다.');
       return;
     }
-    // TODO 에러처리
-    // 백엔드 통신
 
     fetch(`${API.review}/${reviewId}`, {
       method: 'DELETE',
       headers: {
-        ...(Authorization && { Authorization: Authorization }),
+        Authorization: Authorization,
       },
     })
-      .then(res => res.json())
       .then(res => {
-        if (res.message === 'NO CONTENT') {
+        if (res.statusText === 'No Content') {
           getReviews();
+          return;
+        }
+
+        if (res.status === 400) {
+          alert('에러입니다.');
+          return;
         }
       })
       .catch(e => {
@@ -113,7 +126,7 @@ function DetailReviews({ aboutReviews, getReviews, book }) {
               onChange={changeTextarea}
               placeholder={
                 !purchased || !Authorization
-                  ? '로그인이 필요한 서비스입니다 :)'
+                  ? '책 구매 후 리뷰를 남겨주세요 :)'
                   : '다양한 생각을 남겨주세요 :)'
               }
               value={inputTextarea}

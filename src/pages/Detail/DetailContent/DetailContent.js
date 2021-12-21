@@ -6,11 +6,25 @@ import { MdOutlineRateReview, MdStarRate } from 'react-icons/md';
 import { API } from '../../../config';
 
 function DetailContent({ book, setBook, aboutReviews }) {
+  // 보기 미리보기 url 처리
   const params = useParams();
   const { bookId } = params;
-  const reviewsLength = !aboutReviews ? 0 : aboutReviews.review.length;
-  const { purchased, name, authors, price, description, thumbnail } = book;
-  const avgRating = !aboutReviews ? 0.0 : aboutReviews.average.avg_rating;
+  const reviewsLength =
+    !aboutReviews || !aboutReviews.review ? 0 : aboutReviews.review.length;
+  const {
+    purchased,
+    name,
+    authors,
+    price,
+    description,
+    thumbnail,
+    // preview_file,
+    // file,
+  } = book;
+  const avgRating =
+    !aboutReviews || !aboutReviews.average
+      ? 0.0
+      : aboutReviews.average.avg_rating;
 
   const Authorization = sessionStorage.getItem('Authorization');
 
@@ -20,20 +34,37 @@ function DetailContent({ book, setBook, aboutReviews }) {
       return;
     }
 
-    //  TODO 백엔드 통신
-    // useEffect(() => {
-    //   fetch('', headers: {
-    // Authorization: Authorization
-    // })
-    //     .then(res => res.json())
-    //     .then(res => {
-    //       // purchased 설정
-    //       // content 설정
-    //     });
-    // }, []);
+    fetch(API.orders, {
+      method: 'POST',
+      headers: {
+        Authorization: Authorization,
+      },
+      body: JSON.stringify({
+        cart_id: [bookId],
+      }),
+    })
+      .then(res => {
+        if (res.status === 201) {
+          alert('주문이 완료되었습니다');
+          setBook({ ...book, purchased: true });
+          return;
+        }
 
-    alert('구매되었습니다!');
-    setBook({ ...book, purchased: true });
+        return res.json();
+      })
+      .then(res => {
+        if (!!res && !!res.message) {
+          switch (res.message) {
+            case 'KEY_ERROR':
+            case 'TransactionManagementError':
+              alert('에러입니다');
+              break;
+            default:
+              break;
+          }
+        }
+        return;
+      });
   };
 
   const toCartPage = () => {
@@ -43,6 +74,7 @@ function DetailContent({ book, setBook, aboutReviews }) {
     }
 
     fetch(API.carts, {
+      method: 'POST',
       headers: {
         Authorization: Authorization,
       },
@@ -52,10 +84,24 @@ function DetailContent({ book, setBook, aboutReviews }) {
     })
       .then(res => res.json())
       .then(res => {
-        // purchased 설정
-        // content 설정
+        switch (res.message) {
+          case 'SUCCESS':
+            alert('장바구니에 추가했습니다');
+            break;
+          case 'BOOK_NOT_EXIST':
+            alert('존재하지 않는 책입니다.');
+            break;
+          case 'BOOK_ALREADY_EXIST':
+            alert('이미 구매한 책입니다.');
+            break;
+          case 'INVALID_CART':
+          case 'KEY_ERROR':
+            alert('에러입니다.');
+            break;
+          default:
+            break;
+        }
       });
-    // TODO 백엔드 통신 장바구니 추가하기
   };
 
   return (

@@ -13,25 +13,28 @@ function Detail() {
   const Authorization = sessionStorage.getItem('Authorization');
 
   const getReviews = useCallback(() => {
-    // TODO 백엔드 통신
-    // fetch('/data/reviews.json')
-    fetch(`${API.review}/${bookId}`)
+    fetch(`${API.review}?book_id=${bookId}`)
       .then(res => res.json())
       .then(res => {
-        setAboutReviews(res.result);
+        if (!!res.result) {
+          setAboutReviews(res.result[0]);
+          return;
+        }
+
+        switch (res.message) {
+          case 'DOES_NOT_EXIST':
+            alert('에러입니다');
+            break;
+          default:
+            break;
+        }
       })
       .catch(e => {
         console.error(e);
       });
-    // TODO 에러처리
-    // 성공시 다시 변경하기
-    // }, [Authorization, bookId]);
   }, [bookId]);
 
   useEffect(() => {
-    // TODO 백엔드 통신 부분
-    // fetch(`/data/book${bookId}.json`)
-
     fetch(`${API.book}/${bookId}`, {
       headers: {
         ...(Authorization && { Authorization: Authorization }),

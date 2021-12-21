@@ -9,7 +9,9 @@ import { kakaoLogin, logingOut } from '../../api/KakaoApi';
 const Nav = () => {
   const navigate = useNavigate();
   const [isWideSearchBar, setIsWideSearchBar] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loggedIn, setLoggedIn] = useState(
+    !!sessionStorage.getItem('Authorization')
+  );
   const [profileOpened, setProfileOpened] = useState(false);
   const profile = useRef();
 
