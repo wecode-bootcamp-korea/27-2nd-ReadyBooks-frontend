@@ -4,7 +4,7 @@ import { API } from '../../config.js';
 import styled from 'styled-components';
 
 function Cart() {
-  const [productList, setProductList] = useState([]); //mockdata 받아옴
+  const [productList, setProductList] = useState([]);
 
   const checkedProducts = productList.filter(
     product => product.isChecked === true
@@ -14,14 +14,11 @@ function Cart() {
   const isAllChecked = checkedProductListLength === productList.length;
   const checkedProductListTotalPrice = checkedProducts.reduce(
     (total, product) => {
-      total += product.price; //total = total + x
+      total += Number(product.price);
       return total;
     },
     0
   );
-  const checkedDeleteProducts = item => {
-    setProductList(item => item.filter(item => item.isChecked === false));
-  };
 
   useEffect(() => {
     fetch(`${API.carts}`, {
@@ -42,8 +39,45 @@ function Cart() {
       });
   }, []);
 
-  //로그인 안됐을 때 해당 페이지에 로그인이 필요한 서비스 alert .
-  //로그인 했는데 들어오는게 빈배열 문제
+  const orderHandler = () => {
+    if (productList.filter(item => item.isChecked === true).length === 0) {
+      alert('상품을 선택 해주세요.');
+      return;
+    }
+    fetch(API.orders, {
+      method: 'POST',
+      headers: {
+        Authorization: sessionStorage.getItem('Authorization'),
+      },
+      body: JSON.stringify({
+        cart_id: productList
+          .filter(item => item.isChecked === true)
+          .map(item => item.book_id),
+      }),
+    }).then(res => {
+      res.status === 201 &&
+        setProductList(item => item.filter(item => item.isChecked === false));
+      alert('상품 주문이 완료 됐습니다.');
+    });
+  };
+
+  const deleteHandler = () => {
+    const cartIdQuary = productList
+      .filter(item => item.isChecked === true)
+      .map(item => item.cart_id)
+      .join('&cart_id=');
+
+    fetch(`${API.carts}?cart_id=${cartIdQuary}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: sessionStorage.getItem('Authorization'),
+      },
+    }).then(res => {
+      res.status === 204 &&
+        setProductList(item => item.filter(item => item.isChecked === false));
+      alert('해당 제품이 삭제 되었습니다.');
+    });
+  };
 
   const handleSelectPart = item => {
     setProductList(
@@ -79,22 +113,22 @@ function Cart() {
 
             <AllCheckWrapper>전체선택</AllCheckWrapper>
           </AllCheckWrap>
-          <Button onClick={checkedDeleteProducts}>선택 삭제</Button>
+          <Button onClick={deleteHandler}>선택 삭제</Button>
         </AllSelect>
         {productList.map(item => {
           return (
             <CartItem
-              key={item.book_id}
+              key={item.cart_id}
               id={item.book_id}
               name={item.name}
               title={item.title}
               thumbnail={item.thumbnail}
               item={item}
               alt={item.alt}
-              price={item.price.toLocaleString()}
+              price={item.price.split('.')[0].toLocaleString()}
               handleSelectPart={handleSelectPart}
               isChecked={item.isChecked}
-              checkedDeleteProducts={checkedDeleteProducts}
+              checkedDeleteProducts={deleteHandler}
             />
           );
         })}
@@ -116,7 +150,9 @@ function Cart() {
           </TotalPrice>
         </AsideBox>
         <ButtonWrap>
-          <SelectBuyButton>선택 구매하기</SelectBuyButton>
+          <SelectBuyButton onClick={orderHandler}>
+            선택 구매하기
+          </SelectBuyButton>
         </ButtonWrap>
       </AsideBoxWrap>
     </Cartbox>
@@ -139,6 +175,7 @@ const Carts = styled.div`
   border: 1px solid #dbdbdb;
   margin: 50px;
   background: #f2f2f2;
+  width: 630px;
 `;
 
 const PossibleBuy = styled.div`
@@ -201,7 +238,6 @@ const AsideBox = styled.div`
   justify-content: space-between;
   width: 300px;
   height: 180px;
-  /* padding: 15px; */
   background: white;
   border: 1px solid #dbdbdb;
 `;
@@ -209,17 +245,6 @@ const AsideBox = styled.div`
 const SelectProductNumber = styled.div`
   padding: 15px;
 `;
-
-const checkedText = styled.div`
-  background: blue;
-`;
-
-const checkedBookList = styled.span`
-  background-color: blue;
-  color: red;
-  width: 50px;
-`;
-
 const TotalPrice = styled.div`
   color: #0d0d0d;
 `;
@@ -233,7 +258,8 @@ const TotalPricetext = styled.div`
 `;
 
 const SelectProductPrice = styled.div`
-  width: 50px;
+  width: 80px;
+  text-align: right;
 `;
 
 const ButtonWrap = styled.div`

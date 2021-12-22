@@ -1,20 +1,18 @@
-import React, { useState } from 'react';
-import { FaAccessibleIcon } from 'react-icons/fa';
+import React from 'react';
+import { Link } from 'react-router-dom';
+
 import styled from 'styled-components';
 
 function CartItem({
-  key,
-  id,
   name,
   title,
   thumbnail,
-  alt,
   price,
-  handleClick,
   isChecked,
   handleSelectPart,
   item,
   checkedDeleteProducts,
+  id,
 }) {
   return (
     <Detail>
@@ -23,9 +21,9 @@ function CartItem({
         checked={isChecked}
         onClick={() => handleSelectPart(item)}
       />
-      <Bookcheckbox>
-        <div className="img">{thumbnail}</div>
-      </Bookcheckbox>
+      <Link to={`/detail/${id}`}>
+        <BookImg className="img" src={thumbnail} />
+      </Link>
       <Bookinfo>
         <BookTitle>{title}</BookTitle>
         <AuthorName>{name}</AuthorName>
@@ -42,7 +40,7 @@ const Detail = styled.li`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  width: 610px;
+  width: 100%;
   height: 150px;
   padding: 15px;
   item-style: none;
@@ -58,8 +56,11 @@ const PartCheckbox = styled.input`
   border: 2px solid #bcbcbc;
   cursor: pointer;
 `;
-const Bookcheckbox = styled.div`
-  color: #0d0d0d;
+
+const BookImg = styled.img`
+  width: 80px;
+  height: 100px;
+  margin: 0 15px;
 `;
 
 const Bookinfo = styled.div`
@@ -95,7 +96,10 @@ const DeleteButton = styled.button`
   }
 `;
 
-const Price = styled.h2`
+const Price = styled.div`
   color: #5d3bd9;
   font-weight: bold;
+  margin-right: 10px;
+  text-align: right;
+  width: 80px;
 `;
