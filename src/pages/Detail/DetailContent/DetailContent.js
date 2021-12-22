@@ -5,22 +5,12 @@ import { IoCart } from 'react-icons/io5';
 import { MdOutlineRateReview, MdStarRate } from 'react-icons/md';
 import { API } from '../../../config';
 
-function DetailContent({ book, setBook, aboutReviews }) {
-  // 보기 미리보기 url 처리
+function DetailContent({ book, setBook, aboutReviews, setPdfOpened }) {
   const params = useParams();
   const { bookId } = params;
   const reviewsLength =
     !aboutReviews || !aboutReviews.review ? 0 : aboutReviews.review.length;
-  const {
-    purchased,
-    name,
-    authors,
-    price,
-    description,
-    thumbnail,
-    // preview_file,
-    // file,
-  } = book;
+  const { purchased, name, authors, price, description, thumbnail } = book;
   const avgRating =
     !aboutReviews || !aboutReviews.average
       ? 0.0
@@ -82,6 +72,10 @@ function DetailContent({ book, setBook, aboutReviews }) {
       });
   };
 
+  const openPdf = () => {
+    setPdfOpened(true);
+  };
+
   return (
     <DetailContentWrapper>
       <Information>
@@ -105,9 +99,9 @@ function DetailContent({ book, setBook, aboutReviews }) {
           </InformationTextTop>
           <InformationTextBottom>
             {purchased ? (
-              <ReadBtn>보기</ReadBtn>
+              <ReadBtn onClick={openPdf}>보기</ReadBtn>
             ) : (
-              <PreviewBtn>미리보기</PreviewBtn>
+              <PreviewBtn onClick={openPdf}>미리보기</PreviewBtn>
             )}
             <Border />
             <AboutReview>
@@ -135,6 +129,7 @@ function DetailContent({ book, setBook, aboutReviews }) {
 export default DetailContent;
 
 const DetailContentWrapper = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: flex-start;

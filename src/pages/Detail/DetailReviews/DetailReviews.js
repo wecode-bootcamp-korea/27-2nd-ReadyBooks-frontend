@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Reviews from './Reviews/Reviews';
 import { useParams } from 'react-router-dom';
 import { IoBook, IoBookOutline } from 'react-icons/io5';
 import { API } from '../../../config.js';
+import Reviews from './Reviews/Reviews';
 
 function DetailReviews({ aboutReviews, getReviews, book }) {
   const params = useParams();
