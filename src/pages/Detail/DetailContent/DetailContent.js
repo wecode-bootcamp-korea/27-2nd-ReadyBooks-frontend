@@ -26,10 +26,10 @@ function DetailContent({ book, setBook, aboutReviews }) {
       ? 0.0
       : aboutReviews.average.avg_rating;
 
-  const Authorization = sessionStorage.getItem('Authorization');
+  const token = sessionStorage.getItem('Authorization');
 
   const buyBook = () => {
-    if (!Authorization) {
+    if (!token) {
       alert('로그인이 필요한 서비스입니다');
       return;
     }
@@ -37,7 +37,7 @@ function DetailContent({ book, setBook, aboutReviews }) {
     fetch(API.orders, {
       method: 'POST',
       headers: {
-        Authorization: Authorization,
+        Authorization: token,
       },
       body: JSON.stringify({
         cart_id: [bookId],
@@ -53,22 +53,14 @@ function DetailContent({ book, setBook, aboutReviews }) {
         return res.json();
       })
       .then(res => {
-        if (!!res && !!res.message) {
-          switch (res.message) {
-            case 'KEY_ERROR':
-            case 'TransactionManagementError':
-              alert('에러입니다');
-              break;
-            default:
-              break;
-          }
+        if (BUY_ERRORS[res.message]) {
+          return alert(BUY_ERRORS[res.message]);
         }
-        return;
       });
   };
 
   const toCartPage = () => {
-    if (!Authorization) {
+    if (!token) {
       alert('로그인이 필요한 서비스입니다');
       return;
     }
@@ -76,7 +68,7 @@ function DetailContent({ book, setBook, aboutReviews }) {
     fetch(API.carts, {
       method: 'POST',
       headers: {
-        Authorization: Authorization,
+        Authorization: token,
       },
       body: JSON.stringify({
         book_id: bookId,
@@ -84,22 +76,8 @@ function DetailContent({ book, setBook, aboutReviews }) {
     })
       .then(res => res.json())
       .then(res => {
-        switch (res.message) {
-          case 'SUCCESS':
-            alert('장바구니에 추가했습니다');
-            break;
-          case 'BOOK_NOT_EXIST':
-            alert('존재하지 않는 책입니다.');
-            break;
-          case 'BOOK_ALREADY_EXIST':
-            alert('이미 구매한 책입니다.');
-            break;
-          case 'INVALID_CART':
-          case 'KEY_ERROR':
-            alert('에러입니다.');
-            break;
-          default:
-            break;
+        if (CART_ERRORS[res.message]) {
+          return alert(CART_ERRORS[res.message]);
         }
       });
   };
@@ -324,3 +302,14 @@ const DescriptionContent = styled.p`
   padding: 30px 0;
   line-height: 1.3;
 `;
+
+const BUY_ERRORS = {
+  TransactionManagementError: '에러입니다',
+  KEY_ERROR: '에러입니다',
+};
+
+const CART_ERRORS = {
+  SUCCESS: '장바구니에 추가했습니다.',
+  BOOK_NOT_EXIST: '존재하지 않는 책입니다.',
+  BOOK_ALREADY_EXIST: '이미 구매한 책입니다.',
+};

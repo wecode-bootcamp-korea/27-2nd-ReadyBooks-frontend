@@ -10,7 +10,7 @@ function Detail() {
   const { bookId } = params;
   const [book, setBook] = useState(null);
   const [aboutReviews, setAboutReviews] = useState(null);
-  const Authorization = sessionStorage.getItem('Authorization');
+  const token = sessionStorage.getItem('Authorization');
 
   const getReviews = useCallback(() => {
     fetch(`${API.review}?book_id=${bookId}`)
@@ -20,13 +20,8 @@ function Detail() {
           setAboutReviews(res.result[0]);
           return;
         }
-
-        switch (res.message) {
-          case 'DOES_NOT_EXIST':
-            alert('에러입니다');
-            break;
-          default:
-            break;
+        if (res.message === 'DOES_NOT_EXIST') {
+          return alert('DOES_NOT_EXIST');
         }
       })
       .catch(e => {
@@ -37,7 +32,7 @@ function Detail() {
   useEffect(() => {
     fetch(`${API.book}/${bookId}`, {
       headers: {
-        ...(Authorization && { Authorization: Authorization }),
+        ...(token && { Authorization: token }),
       },
     })
       .then(res => res.json())
@@ -49,7 +44,7 @@ function Detail() {
       });
 
     getReviews();
-  }, [Authorization, bookId, getReviews]);
+  }, [token, bookId, getReviews]);
 
   return (
     <DetailWrapper>
