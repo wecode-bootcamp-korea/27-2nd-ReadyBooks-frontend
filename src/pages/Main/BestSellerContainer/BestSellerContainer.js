@@ -9,6 +9,7 @@ import 'slick-carousel/slick/slick-theme.css';
 
 const BestSellerContainer = () => {
   const [bestSellerList, setBestSellerList] = useState([]);
+  const [isBooksLoading, setIsBooksLoading] = useState(false);
 
   const NextArrow = ({ onClick }) => {
     return (
@@ -36,6 +37,16 @@ const BestSellerContainer = () => {
     prevArrow: <PrevArrow />,
   };
 
+  // TODO 백엔드 통신 베스트셀러 내용 받기
+  // const fetchData = async () => {
+  //   const data = await fetch(
+  //     `${API.bests}?limit=10&offset=0&ordering=review_avg`
+  //   );
+  //   const res = await data.json();
+  //   setBestSellerList(res.result); // res.~~ 로 받아오기
+  // };
+
+  // 목데이터로 데이터 모두 받아오기
   const fetchData = async () => {
     const data = await fetch('/data/bestBookData.json');
     const res = await data.json();
@@ -44,16 +55,20 @@ const BestSellerContainer = () => {
 
   useEffect(() => {
     (async () => {
+      setIsBooksLoading(true);
       await fetchData();
+      setIsBooksLoading(false);
     })();
   }, []);
 
   return (
-    <Slider {...settings}>
-      {bestSellerList.map((el, idx) => (
-        <BestSellerItem el={el} key={idx} id={el.id} />
-      ))}
-    </Slider>
+    !isBooksLoading && (
+      <Slider {...settings}>
+        {bestSellerList.map((el, idx) => (
+          <BestSellerItem el={el} key={idx} idx={idx} id={el.id} />
+        ))}
+      </Slider>
+    )
   );
 };
 

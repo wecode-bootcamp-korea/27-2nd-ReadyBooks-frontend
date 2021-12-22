@@ -1,20 +1,23 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-const BestSellerItem = ({ el, id, level }) => {
+const BestSellerItem = ({ el, level, idx, id }) => {
   const className = 'items level' + level;
 
   return (
-    <Book className={className}>
-      <RankNum>{id}</RankNum>
-      <BookCoverBox>
-        <BookCoverImg src={el.thumbnail} alt="best seller" />
-      </BookCoverBox>
-      <BookInfo>
-        <Title>{el.title}</Title>
-        <Author>{el.author}</Author>
-      </BookInfo>
-    </Book>
+    <Link to={`/detail/${id}`}>
+      <Book className={className}>
+        <RankNum>{idx + 1}</RankNum>
+        <BookCoverBox>
+          <BookCoverImg src={el.thumbnail} alt="best seller" />
+        </BookCoverBox>
+        <BookInfo>
+          <Title>{el.title}</Title>
+          <Author>{el.author}</Author>
+        </BookInfo>
+      </Book>
+    </Link>
   );
 };
 
@@ -58,6 +61,7 @@ const BookCoverBox = styled.div`
 const BookCoverImg = styled.img`
   width: 100%;
   height: 100%;
+  object-fit: cover;
 `;
 
 const BookInfo = styled.div`
@@ -71,6 +75,7 @@ const Title = styled.p`
   line-height: 22px;
   font-size: 16px;
   font-weight: bold;
+  color: ${({ theme }) => theme.black};
   padding-bottom: 4px;
   text-align: center;
   overflow: hidden;

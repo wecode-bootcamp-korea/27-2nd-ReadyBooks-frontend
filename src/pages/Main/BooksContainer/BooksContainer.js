@@ -9,9 +9,10 @@ const BooksContainer = () => {
   const [bookList, setBookList] = useState([]);
   const [isBooksLoading, setIsBooksLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
+  // const [onPage, setOnPage] = useState(true); // 페이지 클릭할 때 페이지num 스타일링
   // const navigate = useNavigate();
 
-  //데이터 끊어서 요청하고 통신해서 받아오기
+  // TODO 백엔드 통신 전체 데이터 페이지네이션 내용 받기
   // const fetchData = async () => {
   //   const data = await fetch(`${API.books}?limit=${booksPerPage}&offset=0`);
   //   // const data = await fetch(
@@ -47,12 +48,16 @@ const BooksContainer = () => {
     return currentBooks;
   };
 
+  // const onClickPage = () => {
+  //   setOnPage(prev => !prev);
+  // };
+
   return (
     <Background>
       {!isBooksLoading && (
         <BookList>
           {showCurrentBooks(bookList).map(el => (
-            <BookItem el={el} key={el.id} />
+            <BookItem el={el} key={el.id} id={el.id} />
           ))}
           {/* 통신할 때 */}
           {/* {bookList.map(el => (
@@ -63,6 +68,7 @@ const BooksContainer = () => {
       <Pagination
         booksPerPage={booksPerPage}
         totalBooks={bookList.length}
+        // onClickPage={onClickPage}
         setCurrentPage={setCurrentPage} // 목데이터로 모든 데이터 받아올 때 씀
         fetchData={fetchData} // 데이터 끊어서 통신할 때 쓰는 props
       />
@@ -73,12 +79,10 @@ const BooksContainer = () => {
 export default BooksContainer;
 
 const Background = styled.div`
-  padding: 20px 0;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin: 10px 0 50px 0;
 `;
 
 const BookList = styled.ul`
