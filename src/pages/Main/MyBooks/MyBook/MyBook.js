@@ -3,12 +3,10 @@ import { useFrame } from 'react-three-fiber';
 import { MeshWobbleMaterial } from 'drei';
 import { useSpring, a } from 'react-spring/three';
 
-const MyBook = ({ position, color, speed, args }) => {
+const MyBook = ({ position, color, speed, args, image }) => {
   const mesh = useRef();
 
-  useFrame(
-    () => (mesh.current.rotation.x = mesh.current.rotation.y += 0.00005)
-  );
+  useFrame(() => (mesh.current.rotation.x = mesh.current.rotation.y += 0.0001));
 
   const [expand, setExpand] = useState(false);
 
@@ -30,6 +28,7 @@ const MyBook = ({ position, color, speed, args }) => {
         speed={speed}
         attach="material"
         factor={0.6}
+        map={image}
       />
     </a.mesh>
   );

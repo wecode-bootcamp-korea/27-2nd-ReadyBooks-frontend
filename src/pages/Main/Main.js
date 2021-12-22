@@ -8,9 +8,15 @@ const Main = () => {
   return (
     <Background>
       <Container>
-        <MyBooksContainer>
-          <MyBooks />
-        </MyBooksContainer>
+        <Title>
+          <Subtitle>Are you Ready to read ?</Subtitle>
+          My Books
+        </Title>
+        <Ground>
+          <MyBooksContainer>
+            <MyBooks />
+          </MyBooksContainer>
+        </Ground>
         <Title>
           <Subtitle>ReadyBooks's Pick </Subtitle>
           Best 10
@@ -22,7 +28,9 @@ const Main = () => {
           <Subtitle>e-books</Subtitle>
           전체보기
         </Title>
-        <BooksContainer />
+        <Ground>
+          <BooksContainer />
+        </Ground>
       </Container>
     </Background>
   );
@@ -40,28 +48,28 @@ const Background = styled.div`
 const Container = styled.div`
   width: 1040px;
   height: 100%;
+  margin-bottom: 50px;
 `;
 
 const MyBooksContainer = styled.div`
   height: 600px;
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  padding: 20px 0;
   background-color: inherit;
   border: none;
+  margin: 30px 0;
+  background-color: ${({ theme }) => theme.veryLightGrey}; ;
 `;
 
 const Ground = styled.div`
   padding: 20px 0;
-  margin: 10px 0 50px 0;
+  margin: 10px 0 80px 0;
 `;
 
 const Title = styled.h2`
   font-size: 24px;
   font-weight: bold;
   text-align: center;
-  padding-top: 40px;
+  padding-top: 80px;
 `;
 
 const Subtitle = styled.p`

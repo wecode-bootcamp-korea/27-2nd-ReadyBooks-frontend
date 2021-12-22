@@ -53,8 +53,7 @@ const PageButton = styled.button`
   background-color: inherit;
   cursor: pointer;
 
-  &:hover,
-  &:focus {
+  &:hover {
     color: ${({ theme }) => theme.pointCobalt};
     font-weight: bold;
   }
