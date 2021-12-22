@@ -5,7 +5,7 @@ import Review from '../Review/Review';
 function Reviews({ reviews, deleteReview }) {
   return (
     <ReviewsWrapper>
-      {!reviews || !reviews.length ? (
+      {reviews.length === 0 ? (
         <ReviewWrapper>첫번째 리뷰어가 되어주세요 :)</ReviewWrapper>
       ) : (
         reviews.map(review => (

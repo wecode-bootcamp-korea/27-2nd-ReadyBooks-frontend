@@ -12,7 +12,7 @@ function DetailReviews({ aboutReviews, getReviews, book }) {
   const { review } = aboutReviews;
   const [inputRate, setInputRate] = useState(5);
   const [inputTextarea, setInputTextarea] = useState('');
-  const Authorization = sessionStorage.getItem('Authorization');
+  const token = sessionStorage.getItem('Authorization');
   const nickname = sessionStorage.getItem('user_nickname');
 
   const handleAddRateStarInput = i => {
@@ -24,7 +24,7 @@ function DetailReviews({ aboutReviews, getReviews, book }) {
   };
 
   const addReview = () => {
-    if (!Authorization) {
+    if (!token) {
       alert('로그인이 필요한 서비스입니다.');
       return;
     }
@@ -35,7 +35,7 @@ function DetailReviews({ aboutReviews, getReviews, book }) {
 
     fetch(`${API.review}`, {
       headers: {
-        Authorization: Authorization,
+        Authorization: token,
       },
       method: 'POST',
       body: JSON.stringify({
@@ -47,19 +47,12 @@ function DetailReviews({ aboutReviews, getReviews, book }) {
     })
       .then(res => res.json())
       .then(res => {
-        switch (res.message) {
-          case 'SUCCESSS':
-            getReviews();
-            break;
-          case 'INVALID_USER':
-          case 'INVALID_TOKEN':
-            alert('로그인이 필요한 서비스입니다.');
-            break;
-          case 'KEY_ERROR':
-            alert('에러입니다');
-            break;
-          default:
-            break;
+        if (res.message === '') {
+          getReviews();
+          return;
+        }
+        if (ADD_REVIEW_ERROR[res.message]) {
+          return alert(ADD_REVIEW_ERROR[res.message]);
         }
       })
       .catch(e => {
@@ -71,7 +64,7 @@ function DetailReviews({ aboutReviews, getReviews, book }) {
   };
 
   const deleteReview = reviewId => {
-    if (!Authorization) {
+    if (!token) {
       alert('로그인이 필요한 서비스입니다.');
       return;
     }
@@ -79,7 +72,7 @@ function DetailReviews({ aboutReviews, getReviews, book }) {
     fetch(`${API.review}/${reviewId}`, {
       method: 'DELETE',
       headers: {
-        Authorization: Authorization,
+        Authorization: token,
       },
     })
       .then(res => {
@@ -125,13 +118,13 @@ function DetailReviews({ aboutReviews, getReviews, book }) {
             <ReviewTextArea
               onChange={changeTextarea}
               placeholder={
-                !purchased || !Authorization
+                !purchased || !token
                   ? '책 구매 후 리뷰를 남겨주세요 :)'
                   : '다양한 생각을 남겨주세요 :)'
               }
               value={inputTextarea}
               onKeyPress={EnterInTextArea}
-              disabled={!purchased || !Authorization ? true : false}
+              disabled={!purchased || !token ? true : false}
             />
             <AddReviewBtn
               disabled={!inputTextarea.trim().length}
@@ -201,3 +194,9 @@ const AddReviewBtn = styled.button`
   cursor: pointer;
   opacity: ${({ isDisabled }) => (isDisabled ? '0.5' : '1')};
 `;
+
+const ADD_REVIEW_ERROR = {
+  INVALID_USER: '로그인이 필요한 서비스입니다.',
+  INVALID_TOKEN: '로그인이 필요한 서비스입니다.',
+  KEY_ERROR: 'KEY_ERROR',
+};
