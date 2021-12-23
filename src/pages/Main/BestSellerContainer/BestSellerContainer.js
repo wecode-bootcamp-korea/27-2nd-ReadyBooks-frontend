@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Slider from 'react-slick';
-// import { API } from '../../../config';
+import { API } from '../../../config';
 import styled from 'styled-components';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import BestSellerItem from './BestItem/BestItem';
@@ -10,6 +10,7 @@ import 'slick-carousel/slick/slick-theme.css';
 const BestSellerContainer = () => {
   const [bestSellerList, setBestSellerList] = useState([]);
   const [isBooksLoading, setIsBooksLoading] = useState(false);
+  const ranking = 10;
 
   const NextArrow = ({ onClick }) => {
     return (
@@ -38,19 +39,12 @@ const BestSellerContainer = () => {
   };
 
   // TODO 백엔드 통신 베스트셀러 내용 받기
-  // const fetchData = async () => {
-  //   const data = await fetch(
-  //     `${API.bests}?limit=10&offset=0&ordering=review_avg`
-  //   );
-  //   const res = await data.json();
-  //   setBestSellerList(res.result); // res.~~ 로 받아오기
-  // };
-
-  // 목데이터로 데이터 모두 받아오기
   const fetchData = async () => {
-    const data = await fetch('/data/bestBookData.json');
+    const data = await fetch(
+      `${API.books}?limit=${ranking}&offset=0&ordering=review_avg`
+    );
     const res = await data.json();
-    setBestSellerList(res);
+    setBestSellerList(res.result); // res.~~ 로 받아오기
   };
 
   useEffect(() => {
@@ -64,9 +58,10 @@ const BestSellerContainer = () => {
   return (
     !isBooksLoading && (
       <Slider {...settings}>
-        {bestSellerList.map((el, idx) => (
-          <BestSellerItem el={el} key={idx} idx={idx} id={el.id} />
-        ))}
+        {bestSellerList &&
+          bestSellerList.map((el, idx) => (
+            <BestSellerItem el={el} key={idx} idx={idx} />
+          ))}
       </Slider>
     )
   );

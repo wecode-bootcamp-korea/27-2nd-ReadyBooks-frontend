@@ -1,7 +1,8 @@
 import React, { useRef, useState } from 'react';
 import { useFrame } from 'react-three-fiber';
-import { MeshWobbleMaterial } from 'drei';
+import { MeshWobbleMaterial, Text } from 'drei';
 import { useSpring, a } from 'react-spring/three';
+// import { useNavigate } from 'react-router-dom';
 
 const MyBook = ({ position, color, speed, args, image }) => {
   const mesh = useRef();
@@ -14,14 +15,27 @@ const MyBook = ({ position, color, speed, args, image }) => {
     scale: expand ? [1.4, 1.4, 1.4] : [1, 1, 1],
   });
 
+  // const nav = useNavigate();
   return (
     <a.mesh
       position={position}
       ref={mesh}
-      onClick={() => setExpand(!expand)}
+      onClick={() => {
+        setExpand(!expand);
+        // console.log(image);
+        // nav('/cart');
+      }}
       scale={props.scale}
       castShadow
     >
+      <Text
+        color="black"
+        anchorX="center"
+        anchorY="middle"
+        position={[2, 0, 0]}
+      >
+        hello
+      </Text>
       <boxBufferGeometry attach="geometry" args={args} />
       <MeshWobbleMaterial
         color={color}

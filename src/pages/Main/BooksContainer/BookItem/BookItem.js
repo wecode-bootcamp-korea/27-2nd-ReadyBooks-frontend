@@ -2,15 +2,15 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-const BookItem = ({ el, id }) => {
+const BookItem = ({ el }) => {
   const getAuthors = () => {
-    for (let i = 0; i < el.author.length; i++) {
-      return el.author.join(' | ');
+    for (let i = 0; i < el.authors.length; i++) {
+      return el && el.authors.join(' | ');
     }
   };
 
   return (
-    <Link to={`/detail/${id}`}>
+    <Link to={`/detail/${el.book_id}`}>
       <Book>
         <BookCoverBox>
           <BookCoverImg src={el.thumbnail} alt={el.title} />
