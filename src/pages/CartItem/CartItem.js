@@ -1,35 +1,27 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
 import styled from 'styled-components';
 
-function CartItem({
-  name,
-  title,
-  thumbnail,
-  price,
-  isChecked,
-  handleSelectPart,
-  item,
-  checkedDeleteProducts,
-  id,
-}) {
+function CartItem({ handleSelectPart, item, deleteSelectHandler }) {
+  const { cart_id, title, name, thumbnail, isChecked, price, book_id } = item;
   return (
     <Detail>
       <PartCheckbox
         type="checkbox"
         checked={isChecked}
-        onClick={() => handleSelectPart(item)}
+        onChange={() => handleSelectPart(item)}
       />
-      <Link to={`/detail/${id}`}>
+      <Link to={`/detail/${book_id}`}>
         <BookImg className="img" src={thumbnail} />
       </Link>
       <Bookinfo>
         <BookTitle>{title}</BookTitle>
         <AuthorName>{name}</AuthorName>
-        <DeleteButton onClick={checkedDeleteProducts}>삭제</DeleteButton>
+        <DeleteButton onClick={() => deleteSelectHandler(cart_id)}>
+          삭제
+        </DeleteButton>
       </Bookinfo>
-      <Price>{price}</Price>
+      <Price>{Number(price).toLocaleString()}원</Price>
     </Detail>
   );
 }
@@ -43,10 +35,7 @@ const Detail = styled.li`
   width: 100%;
   height: 150px;
   padding: 15px;
-  item-style: none;
-  background: white;
   border-top: 1px solid #dbdbdb;
-  border-bottom: 1px solid #dbdbdb;
 `;
 
 const PartCheckbox = styled.input`
@@ -58,9 +47,11 @@ const PartCheckbox = styled.input`
 `;
 
 const BookImg = styled.img`
+  object-fit: cover;
   width: 80px;
   height: 100px;
   margin: 0 15px;
+  border-radius: 5px;
 `;
 
 const Bookinfo = styled.div`
@@ -101,5 +92,5 @@ const Price = styled.div`
   font-weight: bold;
   margin-right: 10px;
   text-align: right;
-  width: 80px;
+  width: 120px;
 `;
