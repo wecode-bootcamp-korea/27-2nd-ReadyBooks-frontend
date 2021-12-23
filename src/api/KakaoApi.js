@@ -32,7 +32,11 @@ const sendAccessTokenToBack = (access_token, navigate, setLoggedIn) => {
       if (res.Authorization) {
         sessionStorage.setItem('Authorization', res.Authorization);
         sessionStorage.setItem('user_nickname', res.user_nickname);
-        sessionStorage.setItem('user_profile_img', res.user_profile_img);
+        sessionStorage.setItem(
+          'user_profile_img',
+          res.user_profile_img ||
+            'https://readybook.s3.ap-northeast-2.amazonaws.com/제목_없는_아트워크.jpg'
+        );
         sessionStorage.setItem('user_id', res.user_id);
         navigate('/');
         setLoggedIn(true);
