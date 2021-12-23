@@ -43,7 +43,7 @@ function DetailContent({ book, setBook, aboutReviews, setPdfOpened }) {
         return res.json();
       })
       .then(res => {
-        if (BUY_ERRORS[res.message]) {
+        if (res && BUY_ERRORS[res.message]) {
           return alert(BUY_ERRORS[res.message]);
         }
       });
