@@ -169,6 +169,7 @@ const LoginBtn = styled.button`
   background: none;
   padding: none;
   border: none;
+  cursor: pointer;
 `;
 
 const ProfileBtn = styled.button`

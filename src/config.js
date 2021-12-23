@@ -1,5 +1,5 @@
 // const BASELINE = 'http://10.58.6.7:8000';
-const BASELINE_JINSUNG = 'http://10.58.7.250:8000';
+const BASELINE_JINSUNG = 'http://3.34.52.65:8000';
 
 export const API = {
   login: `${BASELINE_JINSUNG}/users/kakao/signin`,
