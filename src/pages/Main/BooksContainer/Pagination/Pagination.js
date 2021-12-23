@@ -1,32 +1,26 @@
 import React from 'react';
+import { useEffect } from 'react/cjs/react.development';
 import styled from 'styled-components';
 
-const Pagination = ({
-  booksPerPage,
-  totalBooks,
-  setCurrentPage,
-  fetchData,
-}) => {
-  const pageNumbers = [];
+const Pagination = ({ fetchData, lastPage, currentPage, setCurrentPage }) => {
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage]);
 
-  for (let i = 1; i <= Math.ceil(totalBooks / booksPerPage); i++) {
-    pageNumbers.push(i);
-  }
-
+  const onPage = el => {
+    setCurrentPage(el);
+  };
   return (
     <PageUl>
-      {pageNumbers.map(num => (
-        <PageLi key={num}>
-          <PageButton
-            onClick={
-              () => {
-                setCurrentPage(num);
-              }
-              // fetchData
-            }
+      {[...Array(lastPage)].map((el, idx) => (
+        <PageLi key={idx}>
+          <PageSpan
+            onClick={() => onPage(idx + 1)}
+            checkPage={currentPage === idx + 1}
           >
-            {num}
-          </PageButton>
+            {idx + 1}
+          </PageSpan>
         </PageLi>
       ))}
     </PageUl>
@@ -43,12 +37,14 @@ const PageUl = styled.ul`
 
 const PageLi = styled.li`
   font-weight: bold;
-  margin: 0 10px;
+  margin: 0 15px;
 `;
 
-const PageButton = styled.button`
-  font-size: 15px;
-  color: ${({ theme }) => theme.grey};
+const PageSpan = styled.span`
+  font-size: 18px;
+  color: ${({ theme, checkPage }) =>
+    checkPage ? theme.pointCobalt : theme.grey};
+  font-weight: ${({ checkPage }) => (checkPage ? `bold` : `normal`)}};
   border: 0;
   background-color: inherit;
   cursor: pointer;

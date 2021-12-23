@@ -71,12 +71,16 @@ export const breakConnection = () => {
 };
 
 export const logingOut = () => {
-  Kakao.Auth &&
+  if (!Kakao.isInitialized()) {
+    kakaoInit();
+  }
+  Kakao &&
+    Kakao.Auth &&
     Kakao.Auth.logout(function () {
-      sessionStorage.clear();
-      alert('로그아웃 되었습니다.');
       return;
     });
+  sessionStorage.clear();
+  alert('로그아웃 되었습니다.');
 };
 
 export const getUsers = () => {

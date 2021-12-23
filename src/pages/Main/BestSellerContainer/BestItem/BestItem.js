@@ -2,11 +2,11 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-const BestSellerItem = ({ el, level, idx, id }) => {
+const BestSellerItem = ({ el, level, idx }) => {
   const className = 'items level' + level;
 
   return (
-    <Link to={`/detail/${id}`}>
+    <Link to={`/detail/${el.book_id}`}>
       <Book className={className}>
         <RankNum>{idx + 1}</RankNum>
         <BookCoverBox>
