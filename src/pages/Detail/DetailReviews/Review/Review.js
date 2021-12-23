@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { TiDelete } from 'react-icons/ti';
 
 function Review({ review, deleteReview }) {
-  const { user, user_id, content, created_at, review_id } = review;
+  const { nickname, user_id, content, created_at, review_id } = review;
   const currentUserId = sessionStorage.getItem('user_id');
   const createDate = new Date(created_at);
 
@@ -13,7 +13,7 @@ function Review({ review, deleteReview }) {
     >
       <ReviewContent>
         <ReviewInformation>
-          <Writer>{user}</Writer>
+          <Writer>{nickname}</Writer>
           <ReviewDate>
             {createDate.toLocaleDateString().slice(0, -1)}
           </ReviewDate>

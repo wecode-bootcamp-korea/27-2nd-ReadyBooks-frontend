@@ -45,22 +45,24 @@ function DetailReviews({ aboutReviews, getReviews, book }) {
         book_id: bookId,
       }),
     })
-      .then(res => res.json())
       .then(res => {
-        if (res.message === '') {
+        if (res.status === 200) {
           getReviews();
+          setInputRate(5);
+          setInputTextarea('');
           return;
+        } else {
+          return res.json();
         }
-        if (ADD_REVIEW_ERROR[res.message]) {
+      })
+      .then(res => {
+        if (res && ADD_REVIEW_ERROR[res.message]) {
           return alert(ADD_REVIEW_ERROR[res.message]);
         }
       })
       .catch(e => {
         console.error(e);
       });
-
-    setInputRate(5);
-    setInputTextarea('');
   };
 
   const deleteReview = reviewId => {
