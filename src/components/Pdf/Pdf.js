@@ -38,7 +38,7 @@ export default function Pdf({ purchased, setPdfOpened, file }) {
   };
 
   const goToNextPage = () => {
-    if (pageNumber < (purchased ? numPages : 10)) {
+    if (pageNumber < (purchased ? numPages : 4)) {
       setPageNumber(pageNumber + 1);
       return;
     }

@@ -4,29 +4,24 @@ import { Canvas, useLoader } from 'react-three-fiber';
 import { softShadows, OrbitControls } from 'drei';
 import { API } from '../../../config';
 import MyBook from './MyBook/MyBook';
-// import { Link } from 'react-router-dom';
 
 softShadows();
 
-const MyBookCustom = ({ getImage, idx }) => {
+const MyBookCustom = ({ bookId, getImage, idx, bookTitle }) => {
   const [image] = useLoader(THREE.TextureLoader, [getImage]);
 
   return (
-    // <Link to={`/detail/${el.book_id}`}>
     <MyBook
       position={[5 * idx, 0, 0]}
       color="#ffdddd"
-      args={[3, 5, 0.5]}
+      args={[3.5, 5, 0.5]}
       speed={0.2}
       image={image}
+      bookId={bookId}
+      bookTitle={bookTitle}
     />
-    // </Link>
   );
 };
-
-// const MyBookCustomWrapper = ({ children, el }) => {
-//   return <Link to={`/detail/${el.book_id}`}>{children}</Link>;
-// };
 
 const MyBooks = () => {
   const [purchasedBookList, setPurchasedBookList] = useState([]);
@@ -59,10 +54,9 @@ const MyBooks = () => {
       <Canvas
         colorManagement
         shadowMap
-        camera={{ position: [-15, 15, 30], fov: 19 }}
+        camera={{ position: [-15, 8, 30], fov: 20 }}
       >
         <ambientLight intensity={1.5} />
-
         <directionalLight
           castShadow
           position={[0, 10, 0]}
@@ -90,14 +84,14 @@ const MyBooks = () => {
               purchasedBookList.map(
                 (el, idx) =>
                   isBookLoaded && (
-                    // <MyBookCustomWrapper el={el}>
                     <MyBookCustom
                       getImage={el.order_book.thumbnail}
                       key={idx}
                       id={el.order_id}
                       idx={idx}
+                      bookId={el.order_book.id}
+                      bookTitle={el.order_book}
                     />
-                    // </MyBookCustomWrapper>
                   )
               )}
           </Suspense>
