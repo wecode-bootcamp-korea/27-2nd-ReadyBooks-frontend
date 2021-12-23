@@ -167,6 +167,7 @@ const Cartbox = styled.div`
   display: flex;
   align-content: center;
   align-items: baseline;
+  min-height: 500px;
   justify-content: center;
   background: #f2f2f2;
 `;
