@@ -6,10 +6,7 @@ import styled from 'styled-components';
 function Cart() {
   const [productList, setProductList] = useState([]);
 
-  const checkedProducts = productList.filter(
-    product => product.isChecked === true
-  );
-
+  const checkedProducts = productList.filter(product => product.isChecked);
   const checkedProductListLength = checkedProducts.length;
   const isAllChecked = checkedProductListLength === productList.length;
   const checkedProductListTotalPrice = checkedProducts.reduce(
@@ -61,7 +58,7 @@ function Cart() {
     });
   };
 
-  const deleteHandler = () => {
+  const deleteAllHandler = () => {
     const cartIdQuary = productList
       .filter(item => item.isChecked === true)
       .map(item => item.cart_id)
@@ -75,6 +72,19 @@ function Cart() {
     }).then(res => {
       res.status === 204 &&
         setProductList(item => item.filter(item => item.isChecked === false));
+      alert('해당 제품이 삭제 되었습니다.');
+    });
+  };
+
+  const deleteSelectHandler = cart_id => {
+    fetch(`${API.carts}?cart_id=${cart_id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: sessionStorage.getItem('Authorization'),
+      },
+    }).then(res => {
+      res.status === 204 &&
+        setProductList(item => item.filter(item => item.cart_id !== cart_id));
       alert('해당 제품이 삭제 되었습니다.');
     });
   };
@@ -108,27 +118,20 @@ function Cart() {
             <Allcheck
               checked={isAllChecked}
               type="checkbox"
-              onClick={handleSelectAll}
+              onChange={handleSelectAll}
             />
 
             <AllCheckWrapper>전체선택</AllCheckWrapper>
           </AllCheckWrap>
-          <Button onClick={deleteHandler}>선택 삭제</Button>
+          <Button onClick={deleteAllHandler}>선택 삭제</Button>
         </AllSelect>
         {productList.map(item => {
           return (
             <CartItem
               key={item.cart_id}
-              id={item.book_id}
-              name={item.name}
-              title={item.title}
-              thumbnail={item.thumbnail}
               item={item}
-              alt={item.alt}
-              price={item.price.split('.')[0].toLocaleString()}
               handleSelectPart={handleSelectPart}
-              isChecked={item.isChecked}
-              checkedDeleteProducts={deleteHandler}
+              deleteSelectHandler={deleteSelectHandler}
             />
           );
         })}
@@ -136,15 +139,13 @@ function Cart() {
       <AsideBoxWrap>
         <AsideBox>
           <SelectProductNumber>
-            <checkedText>
-              {checkedProductListLength}권을 선택하셨습니다.
-            </checkedText>
+            {checkedProductListLength}권을 선택하셨습니다.
           </SelectProductNumber>
           <TotalPrice>
             <TotalPricetext>
               합계
               <SelectProductPrice>
-                {checkedProductListTotalPrice.toLocaleString()}
+                {checkedProductListTotalPrice.toLocaleString()}원
               </SelectProductPrice>
             </TotalPricetext>
           </TotalPrice>
@@ -172,9 +173,9 @@ const Cartbox = styled.div`
 
 const Carts = styled.div`
   height: 100%;
-  border: 1px solid #dbdbdb;
+  border-radius: 5px;
   margin: 50px;
-  background: #f2f2f2;
+  background: #fff;
   width: 630px;
 `;
 
@@ -187,6 +188,7 @@ const PossibleBuy = styled.div`
   background-color: #643df2;
   font-size: 17px;
   color: white;
+  border-radius: 5px 5px 0px 0px;
 `;
 
 const AllSelect = styled.div`
@@ -239,7 +241,7 @@ const AsideBox = styled.div`
   width: 300px;
   height: 180px;
   background: white;
-  border: 1px solid #dbdbdb;
+  border-radius: 5px;
 `;
 
 const SelectProductNumber = styled.div`
@@ -255,10 +257,11 @@ const TotalPricetext = styled.div`
   display: flex;
   justify-content: space-between;
   padding: 15px;
+  border-radius: 0px 0px 5px 5px;
 `;
 
 const SelectProductPrice = styled.div`
-  width: 80px;
+  width: 120px;
   text-align: right;
 `;
 
@@ -273,10 +276,12 @@ const SelectBuyButton = styled.button`
   width: 300px;
   height: 40px;
   background: #643df2;
-  border: 1px solid #dbdbdb;
+  border-radius: 5px;
+  border: none;
   color: white;
   font-size: 16px;
   margin-top: 7%;
+
   &:hover {
     opacity: 0.9;
   }
