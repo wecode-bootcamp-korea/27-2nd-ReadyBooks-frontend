@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Document, Page } from 'react-pdf';
 import styled from 'styled-components';
 import {
@@ -18,6 +18,16 @@ export default function Pdf({ purchased, setPdfOpened, file }) {
   const closePdf = () => {
     setPdfOpened(false);
   };
+
+  useEffect(() => {
+    const scrollY = window.scrollY;
+    document.body.style.overflow = 'hidden';
+
+    return () => {
+      document.body.style.cssText = '';
+      window.scrollTo(0, parseInt(scrollY * -1 || '0', 10) * -1);
+    };
+  }, []);
 
   return (
     <PdfInner>
