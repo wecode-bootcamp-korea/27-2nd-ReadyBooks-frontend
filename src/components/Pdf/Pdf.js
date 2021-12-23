@@ -11,14 +11,6 @@ export default function Pdf({ purchased, setPdfOpened, file }) {
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
 
-  function onDocumentLoadSuccess({ numPages }) {
-    setNumPages(numPages);
-  }
-
-  const closePdf = () => {
-    setPdfOpened(false);
-  };
-
   useEffect(() => {
     const scrollY = window.scrollY;
     document.body.style.overflow = 'hidden';
@@ -29,6 +21,34 @@ export default function Pdf({ purchased, setPdfOpened, file }) {
     };
   }, []);
 
+  const onDocumentLoadSuccess = ({ numPages }) => {
+    setNumPages(numPages);
+  };
+
+  const closePdf = () => {
+    setPdfOpened(false);
+  };
+
+  const gotoBeforePage = () => {
+    if (pageNumber > 1) {
+      setPageNumber(pageNumber - 1);
+    } else {
+      alert('첫 페이지 입니다!');
+    }
+  };
+
+  const goToNextPage = () => {
+    if (pageNumber < (purchased ? numPages : 10)) {
+      setPageNumber(pageNumber + 1);
+      return;
+    }
+
+    if (purchased) {
+      alert('마지막 페이지입니다.');
+    } else {
+      alert('책 구매 후 이후 내용을 보실 수 있습니다 :)');
+    }
+  };
   return (
     <PdfInner>
       <CloseBtn onClick={closePdf}>
@@ -38,20 +58,10 @@ export default function Pdf({ purchased, setPdfOpened, file }) {
         <Page pageNumber={pageNumber} />
       </Document>
       <Bottom>
-        <Btn
-          onClick={() =>
-            pageNumber > 1 ? setPageNumber(pageNumber - 1) : null
-          }
-        >
+        <Btn onClick={gotoBeforePage}>
           <BsFillArrowLeftCircleFill />
         </Btn>
-        <Btn
-          onClick={() =>
-            pageNumber < (purchased ? numPages : 10)
-              ? setPageNumber(pageNumber + 1)
-              : null
-          }
-        >
+        <Btn onClick={goToNextPage}>
           <BsFillArrowRightCircleFill />
         </Btn>
       </Bottom>
