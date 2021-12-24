@@ -8,7 +8,7 @@
 
 - 개발기간: 2021/12/13~2021/12/23
 
-<img src='https://media.vlpt.us/images/tjdgus0528/post/01efc540-1bd4-4959-8e09-364f4776e226/readyBooks.jpg' width="754" alt='단체사진'/>
+<img src='https://media.vlpt.us/images/tjdgus0528/post/0c7db5d1-cc6a-4276-957b-ef74c3e2584b/ready.jpg' width="754" alt='단체사진'/>
 
 - Frontend :
   - 홍유진 [github link](https://github.com/howyoujini)
