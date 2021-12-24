@@ -8,7 +8,7 @@
 
 - 개발기간: 2021/12/13~2021/12/23
 
-<img src='/images/readyBooks.png' width="754" alt='단체사진'/>
+<img src='https://media.vlpt.us/images/tjdgus0528/post/01efc540-1bd4-4959-8e09-364f4776e226/readyBooks.jpg' width="754" alt='단체사진'/>
 
 - Frontend :
   - 홍유진 [github link](https://github.com/howyoujini)
@@ -59,11 +59,11 @@
 
 ### 데모영상(이미지클릭)
 
-[!ReadyBooks](https://youtu.be/83JF9irjIb4)
+<a href="https://youtu.be/83JF9irjIb4" target="_blank">ReadyBooks</a>
 
 ### ERD
 
-<img width="754" src='/images/erd.png' alt='erd'/>
+<img width="754" src='https://media.vlpt.us/images/tjdgus0528/post/13b1ec06-fb7d-464a-bbe0-3508db42b8f1/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202021-12-24%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%204.28.10.png' alt='erd'/>
 
 ### Reference
 
