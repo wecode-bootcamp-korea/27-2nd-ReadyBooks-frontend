@@ -1,5 +1,7 @@
 # ReadyBooks
 
+[ReadyBooks Link](http://readyreadybooks.s3-website.ap-northeast-2.amazonaws.com/)
+
 ## 프로젝트
 
 함께 책 읽을 준비 되셨나요?
