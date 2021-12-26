@@ -3,7 +3,10 @@
 ## 프로젝트
 
 함께 책 읽을 준비 되셨나요?
-[![ReadyBooks] (https://media.vlpt.us/images/tjdgus0528/post/f79132e6-183d-41f5-9078-ebff9a5068cb/ezgif.com-gif-maker%20(1).gif)]
+
+## 데모영상 (이미지 클릭)
+
+[![ReadyBooks](<https://media.vlpt.us/images/tjdgus0528/post/f79132e6-183d-41f5-9078-ebff9a5068cb/ezgif.com-gif-maker%20(1).gif>)](https://youtu.be/83JF9irjIb4)
 
 ## 개발 인원 및 기간
 
@@ -57,10 +60,6 @@
 
 - 전체 삭제 및 선택 삭제
 - 구매하기 기능
-
-### 데모영상(이미지클릭)
-
-<a href="https://youtu.be/83JF9irjIb4" target="_blank">ReadyBooks</a>
 
 ### ERD
 
