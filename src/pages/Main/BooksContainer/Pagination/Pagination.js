@@ -43,7 +43,7 @@ const PageSpan = styled.span`
   font-size: 18px;
   color: ${({ theme, checkPage }) =>
     checkPage ? theme.pointCobalt : theme.grey};
-  font-weight: ${({ checkPage }) => (checkPage ? `bold` : `normal`)}};
+  font-weight: ${({ checkPage }) => (checkPage ? `bold` : `normal`)};
   border: 0;
   background-color: inherit;
   cursor: pointer;
