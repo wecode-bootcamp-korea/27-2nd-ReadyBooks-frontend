@@ -3,20 +3,28 @@ import MyBooks from '../Main/MyBooks/MyBooks';
 import styled from 'styled-components';
 import BestSellerContainer from './BestSellerContainer/BestSellerContainer';
 import BooksContainer from './BooksContainer/BooksContainer';
+// import { useEffect } from 'react/cjs/react.development';
 
 const Main = () => {
+  let token = sessionStorage.getItem('Authorization') || '';
+
   return (
     <Background>
       <Container>
-        <Title>
-          <Subtitle>Are you Ready to read ?</Subtitle>
-          My Books
-        </Title>
-        <Ground>
-          <MyBooksContainer>
-            <MyBooks />
-          </MyBooksContainer>
-        </Ground>
+        {token && (
+          <>
+            <Title>
+              <Subtitle>Are you Ready to read ?</Subtitle>
+              My Books
+            </Title>
+            <Ground>
+              <MyBooksContainer>
+                <MyBooks />
+              </MyBooksContainer>
+            </Ground>
+          </>
+        )}
+
         <Title>
           <Subtitle>ReadyBooks's Pick </Subtitle>
           Best 10
@@ -52,12 +60,14 @@ const Container = styled.div`
 `;
 
 const MyBooksContainer = styled.div`
+  width: 80vw;
   height: 600px;
-  padding: 20px 0;
   background-color: inherit;
   border: none;
   margin: 30px 0;
-  background-color: ${({ theme }) => theme.veryLightGrey}; ;
+  /* border: 0.2px solid lightgrey; */
+  position: relative;
+  left: -400px;
 `;
 
 const Ground = styled.div`

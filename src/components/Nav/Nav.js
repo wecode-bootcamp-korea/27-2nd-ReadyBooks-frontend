@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import SearchBar from '../Nav/SearchBar/SearchBar';
 import styled from 'styled-components';
-import { FaSearch } from 'react-icons/fa';
 import { BsFillCartFill } from 'react-icons/bs';
 import { kakaoLogin, logingOut } from '../../api/KakaoApi';
 
@@ -58,16 +58,11 @@ const Nav = () => {
         <Link to="/">
           <Logo>ReadyBooks</Logo>
         </Link>
-        <Search isWideSearchBar={isWideSearchBar}>
-          <Input
-            onFocus={expandSearchWidth}
-            onBlur={shrinkSearchWidth}
-            placeholder="제목, 저자, 출판사 검색"
-          />
-          <IconButton>
-            <FaSearch />
-          </IconButton>
-        </Search>
+        <SearchBar
+          isWideSearchBar={isWideSearchBar}
+          shrinkSearchWidth={shrinkSearchWidth}
+          expandSearchWidth={expandSearchWidth}
+        />
         {loggedIn ? (
           <NavRightBtn>
             <ProfileBtn onClick={openProfile} ref={profile}>
@@ -124,40 +119,6 @@ const Wrapper = styled.div`
 const Logo = styled.div`
   font-size: 28px;
   color: ${({ theme }) => theme.black};
-  cursor: pointer;
-`;
-
-const Search = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: ${({ isWideSearchBar }) => (isWideSearchBar ? '500px' : '330px')};
-  height: 48px;
-  padding: 7px;
-  background-color: white;
-  border-radius: 24px;
-  border: none;
-  box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.1);
-  transition: all 0.5s ease-in-out;
-`;
-
-const Input = styled.input`
-  width: 300px;
-  height: 24px;
-  padding-left: 20px;
-`;
-
-const IconButton = styled.button`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 40px;
-  height: 38px;
-  padding: 10px;
-  background-color: ${({ theme }) => theme.pointCobalt};
-  color: ${({ theme }) => theme.white};
-  border: none;
-  border-radius: 100%;
   cursor: pointer;
 `;
 

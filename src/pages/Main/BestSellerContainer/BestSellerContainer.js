@@ -41,7 +41,7 @@ const BestSellerContainer = () => {
   // TODO 백엔드 통신 베스트셀러 내용 받기
   const fetchData = async () => {
     const data = await fetch(
-      `${API.books}?limit=${ranking}&offset=0&ordering=review_avg`
+      `${API.books}?limit=${ranking}&offset=0&ordering=-review_avg`
     );
     const res = await data.json();
     setBestSellerList(res.result); // res.~~ 로 받아오기
