@@ -62,6 +62,7 @@ const ReviewInformation = styled.div`
   display: flex;
   flex-direction: column;
   font-size: 14px;
+  width: 80px;
 `;
 
 const Writer = styled.span`

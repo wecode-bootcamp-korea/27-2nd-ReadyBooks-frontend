@@ -3,6 +3,7 @@
 ## 프로젝트
 
 함께 책 읽을 준비 되셨나요?
+[![ReadyBooks] (https://media.vlpt.us/images/tjdgus0528/post/f79132e6-183d-41f5-9078-ebff9a5068cb/ezgif.com-gif-maker%20(1).gif)]
 
 ## 개발 인원 및 기간
 
