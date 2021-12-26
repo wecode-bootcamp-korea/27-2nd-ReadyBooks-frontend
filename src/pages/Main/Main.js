@@ -3,7 +3,6 @@ import MyBooks from '../Main/MyBooks/MyBooks';
 import styled from 'styled-components';
 import BestSellerContainer from './BestSellerContainer/BestSellerContainer';
 import BooksContainer from './BooksContainer/BooksContainer';
-// import { useEffect } from 'react/cjs/react.development';
 
 const Main = () => {
   let token = sessionStorage.getItem('Authorization') || '';

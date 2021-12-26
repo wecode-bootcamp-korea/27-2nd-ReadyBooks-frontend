@@ -41,6 +41,7 @@ const Nav = () => {
 
   const login = () => {
     kakaoLogin(navigate, setLoggedIn);
+    setProfileOpened(false);
   };
 
   const logout = () => {

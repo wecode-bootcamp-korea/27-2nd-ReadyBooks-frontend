@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { FaSearch } from 'react-icons/fa';
-import { useState } from 'react/cjs/react.production.min';
 
 const SearchBar = ({
   isWideSearchBar,
